@@ -1,15 +1,12 @@
 (ns jeff303.advent-of-code-2021.day1
   (:require [jeff303.advent-of-code-2021.util :as util]))
 
-(defn- count-window-sum-increases-reducer [window-size {:keys [::window ::num-increases ::position] :as acc} n]
+(defn- count-window-sum-increases-reducer [window-size {:keys [::window ::num-increases] :as acc} n]
   (let [window-full?    (= (count window) window-size)
         next-window     (conj (if window-full? (vec (rest window)) window) n)
-        safe-sum        #(apply + (filter some? %))
-        next-window-sum (safe-sum next-window)
-        last-window-sum (safe-sum window)]
-    (cond-> (-> (assoc acc ::window next-window)
-                (update ::position inc))
-      (and (>= position window-size) (< last-window-sum next-window-sum))
+        safe-sum        #(apply + (filter some? %))]
+    (cond-> (assoc acc ::window next-window)
+      (and window-full? (< (safe-sum window) (safe-sum next-window)))
       (update ::num-increases inc))))
 
 (defn- count-increases-reducer-old
@@ -20,9 +17,10 @@
 
 (defn- run-input-with-window-size [input-res window-size]
   (let [numbers   (->> (util/read-problem-input-as-lines input-res)
-                    (map #(Long. %)))
+                       (map (fn [^String s]
+                              (Long/parseLong s))))
         final-acc (reduce (partial count-window-sum-increases-reducer window-size)
-                          {::window [], ::num-increases 0, ::position 0}
+                          {::window [], ::num-increases 0}
                           numbers)]
     (::num-increases final-acc)))
 
