@@ -1,43 +1,57 @@
-(ns jeff303.advent-of-code-2021.day1
+(ns jeff303.advent-of-code-2021.day2
   (:require [jeff303.advent-of-code-2021.util :as util]))
 
-(defn- count-window-sum-increases-reducer [window-size {:keys [::window ::num-increases] :as acc} n]
-  (let [window-full?    (= (count window) window-size)
-        next-window     (conj (if window-full? (vec (rest window)) window) n)
-        safe-sum        #(apply + (filter some? %))]
-    (cond-> (assoc acc ::window next-window)
-      (and window-full? (< (safe-sum window) (safe-sum next-window)))
-      (update ::num-increases inc))))
+(def ^:private instruction->update-fn-part1
+  {"forward" (fn [acc amount]
+               (update acc ::horizontal-position + amount))
+   "up"      (fn [acc amount]
+               (update acc ::depth - amount))
+   "down"    (fn [acc amount]
+               (update acc ::depth + amount))})
 
-(defn- count-increases-reducer-old
-  "Implementation for part1 before I saw part2; kept for posterity"
-  [{:keys [::last-num ::num-increases] :as acc} n]
-  (cond-> (assoc acc ::last-num n)
-    last-num (update ::num-increases (if (< last-num n) inc identity))))
+(defn- execute-reducer [update-fn-map acc {:keys [::instruction ::amount]}]
+  (let [update-fn (partial (update-fn-map instruction))]
+    (update-fn acc amount)))
 
-(defn- run-input-with-window-size [input-res window-size]
-  (let [numbers   (->> (util/read-problem-input-as-lines input-res)
-                       (map (fn [^String s]
-                              (Long/parseLong s))))
-        final-acc (reduce (partial count-window-sum-increases-reducer window-size)
-                          {::window [], ::num-increases 0}
-                          numbers)]
-    (::num-increases final-acc)))
+(def ^:private instruction->update-fn-part2
+  {"forward" (fn [{:keys [::aim] :as acc} amount]
+               (-> (update acc ::horizontal-position + amount)
+                   (update ::depth + (* aim amount))))
+   "up"      (fn [acc amount]
+               (update acc ::aim - amount))
+   "down"    (fn [acc amount]
+               (update acc ::aim + amount))})
 
-(defn day1-part1
+(defn- execute [init-acc update-fn-map input-res]
+  (let [instructions   (->> (util/read-problem-input-as-lines input-res)
+                            (map (fn [^String s]
+                                   (let [[_ instruction amount] (re-matches #"([^ ]*) (\d+)" s)]
+                                     {::instruction instruction, ::amount (Long. amount)}))))]
+    (reduce (partial execute-reducer update-fn-map)
+            init-acc
+            instructions)))
+
+(defn day2-part1
   ([]
-   (day1-part1 (util/get-day-input *ns*)))
+   (day2-part1 (util/get-day-input *ns*)))
   ([input-res]
-   (run-input-with-window-size input-res 1)))
+   (let [{:keys [::depth ::horizontal-position]} (execute {::depth 0, ::horizontal-position 0}
+                                                          instruction->update-fn-part1
+                                                          input-res)]
+     (* depth horizontal-position))))
 
-(defn day1-part2
+(defn day2-part1-test []
+  (day2-part1 (util/get-day-test-input *ns*)))
+
+(defn day2-part2
   ([]
-   (day1-part2 (util/get-day-input *ns*)))
+   (day2-part2 (util/get-day-input *ns*)))
   ([input-res]
-   (run-input-with-window-size input-res 3)))
+   (let [{:keys [::depth ::horizontal-position]} (execute {::depth 0, ::horizontal-position 0, ::aim 0}
+                                                          instruction->update-fn-part2
+                                                          input-res)]
+     (* depth horizontal-position))))
 
-(defn day1-part1-test []
-  (day1-part1 (util/get-day-test-input *ns*)))
+(defn day2-part2-test []
+  (day2-part2 (util/get-day-test-input *ns*)))
 
-(defn day1-part2-test []
-  (day1-part2 (util/get-day-test-input *ns*)))
