@@ -27,3 +27,5 @@
 /checkouts
 /classes
 /target
+# don't check in our own input files
+resources/input
