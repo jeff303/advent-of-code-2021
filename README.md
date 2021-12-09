@@ -10,6 +10,11 @@ Run the project's tests (this includes all days finished so far).
 
     $ clojure -T:build test
 
+Note: due to [this](https://twitter.com/ericwastl/status/1465805354214830081), I removed my custom input files
+from this repo, although the test still expects them at a certain path.  Files should be named `day1.txt`,
+`day2.txt`, etc. and live under `resources/input`.  You will also have to update the expected values in the assertions
+if plugging in different ones, of course.
+
 ## License
 
 Copyright © 2021 Jeff Evans
