@@ -2,15 +2,6 @@
   (:require [jeff303.advent-of-code-2021.util :as util]
             [clojure.string :as str]))
 
-(defn- input-line->starting-fish-acc [input-line]
-  (let [fishies (mapv #(Long. %) (str/split input-line #","))]
-    (reduce (fn [acc fishy]
-              (if (contains? acc fishy)
-                (update acc fishy inc)
-                (assoc acc fishy 1)))
-            {}
-            fishies)))
-
 (defn- safe-add [x y]
   (cond
     (nil? x)
@@ -34,8 +25,8 @@
   ([rounds]
    (day6 rounds (util/get-day-input *ns*)))
   ([rounds input-res]
-   (let [start-acc (input-line->starting-fish-acc (-> (util/read-problem-input-as-lines input-res)
-                                                      first))
+   (let [start-acc (util/input-nums->count (-> (util/read-problem-input-as-lines input-res)
+                                               first))
          final-acc (loop [round 0
                           acc   start-acc]
                      (if (= round rounds)

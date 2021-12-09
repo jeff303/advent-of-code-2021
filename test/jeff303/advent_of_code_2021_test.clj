@@ -5,7 +5,8 @@
             [jeff303.advent-of-code-2021.day3 :as day3]
             [jeff303.advent-of-code-2021.day4 :as day4]
             [jeff303.advent-of-code-2021.day5 :as day5]
-            [jeff303.advent-of-code-2021.day6 :as day6]))
+            [jeff303.advent-of-code-2021.day6 :as day6]
+            [jeff303.advent-of-code-2021.day7 :as day7]))
 
 (deftest day1-test
   (testing "day1"
@@ -93,5 +94,24 @@
         (is (= 26984457539 (day6/day6-test 256))))
       (testing " with my input"
         (is (= 1622533344325 (day6/day6 256)))))))
+
+(deftest day7-test
+  (testing "day7"
+    (testing ", part 1 works as expected"
+      (testing " with sample test input"
+        (is (= 37 (day7/day7-part1-test))))
+      (testing " with my input"
+        (is (= 343441 (day7/day7-part1)))))
+    (testing " cost function for part 2 works as expected"
+      (doseq [[expected-cost pos1 pos2] [[10 1 5]
+                                         [45 14 5]
+                                         [66 16 5]
+                                         [0 15 15]]]
+        (is (= expected-cost (#'day7/cost-fn-part2 pos1 pos2)))))
+    (testing ", part 2 works as expected"
+      (testing " with sample test input"
+        (is (= 168 (day7/day7-part2-test))))
+      (testing " with my input"
+        (is (= 98925151 (day7/day7-part2)))))))
 
 ;; TODO: make those ^ a macro?

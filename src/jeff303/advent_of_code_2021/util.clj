@@ -31,3 +31,15 @@
   ([ns-sym variant]
    (let [day (get-day ns-sym)]
      `(format "test-input/%s%s.txt" ~day ~variant))))
+
+(defn input-nums->count
+  "Expects `input-line` to be a comma separated string of numbers. Returns a map of each value to its count (number
+  of occurrences in the input."
+  [input-line]
+  (let [nums (mapv #(Long. %) (str/split input-line #","))]
+    (reduce (fn [acc n]
+              (if (contains? acc n)
+                (update acc n inc)
+                (assoc acc n 1)))
+      {}
+      nums)))
