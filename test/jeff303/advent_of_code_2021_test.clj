@@ -7,7 +7,8 @@
             [jeff303.advent-of-code-2021.day5 :as day5]
             [jeff303.advent-of-code-2021.day6 :as day6]
             [jeff303.advent-of-code-2021.day7 :as day7]
-            [jeff303.advent-of-code-2021.day8 :as day8]))
+            [jeff303.advent-of-code-2021.day8 :as day8]
+            [jeff303.advent-of-code-2021.day9 :as day9]))
 
 (deftest day1-test
   (testing "day1"
@@ -122,16 +123,28 @@
         (is (= 26 (day8/day8-part1-test))))
       (testing " with my input"
         (is (= 261 (day8/day8-part1)))))
-    (testing ", part 2 works as expected"
-      (testing " and calculates the cipher correctly"
-        (let [sample-line "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"
-              entry       (#'day8/input-line->entry sample-line)]
-          (is (= {\a \d, \b \e, \c \a, \d \f, \e \g, \f \b, \g \c}
-                 (#'day8/determine-segment-cipher (first entry)))))))
+    (testing " and calculates the cipher correctly"
+      (let [sample-line "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"
+            entry       (#'day8/input-line->entry sample-line)]
+        (is (= {\a \d, \b \e, \c \a, \d \f, \e \g, \f \b, \g \c}
+               (#'day8/determine-segment-cipher (first entry))))))
     (testing ", part 2 works as expected"
       (testing " with sample test input"
         (is (= 61229 (day8/day8-part2-test))))
       (testing " with my input"
         (is (= 987553 (day8/day8-part2)))))))
+
+(deftest day9-test
+  (testing "day9"
+    (testing ", part 1 works as expected"
+      (testing " with sample test input"
+        (is (= 15 (day9/day9-part1-test))))
+      (testing " with my input"
+        (is (= 570 (day9/day9-part1)))))
+    (testing ", part 2 works as expected"
+      (testing " with sample test input"
+        (is (= 1134 (day9/day9-part2-test))))
+      (testing " with my input"
+        (is (= 899392 (day9/day9-part2)))))))
 
 ;; TODO: make those ^ a macro?
