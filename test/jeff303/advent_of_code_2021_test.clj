@@ -8,7 +8,8 @@
             [jeff303.advent-of-code-2021.day6 :as day6]
             [jeff303.advent-of-code-2021.day7 :as day7]
             [jeff303.advent-of-code-2021.day8 :as day8]
-            [jeff303.advent-of-code-2021.day9 :as day9]))
+            [jeff303.advent-of-code-2021.day9 :as day9]
+            [jeff303.advent-of-code-2021.day10 :as day10]))
 
 (deftest day1-test
   (testing "day1"
@@ -146,5 +147,18 @@
         (is (= 1134 (day9/day9-part2-test))))
       (testing " with my input"
         (is (= 899392 (day9/day9-part2)))))))
+
+(deftest day10-test
+  (testing "day10"
+    (testing ", part 1 works as expected"
+      (testing " with sample test input"
+        (is (= 26397 (day10/day10-part1-test))))
+      (testing " with my input"
+        (is (= 390993 (day10/day10-part1)))))
+    (testing ", part 2 works as expected"
+      (testing " with sample test input"
+        (is (= 288957 (day10/day10-part2-test))))
+      (testing " with my input"
+        (is (= 2391385187 (day10/day10-part2)))))))
 
 ;; TODO: make those ^ a macro?
